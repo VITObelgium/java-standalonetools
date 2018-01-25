@@ -37,7 +37,7 @@ class MessageData {
 }
 
 /**
- * @author (c) 2014-2016 Stijn.VanLooy@vito.be
+ * @author (c) 2014-2018 Stijn.VanLooy@vito.be
  *
  */
 @Component
