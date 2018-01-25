@@ -1,0 +1,16 @@
+1.0.0:
+	. initial version
+	. command line app skeleton with:
+		. optional singleton instance
+		. parameterized Spring XML configuration support
+		. ConfigurationService (from resttools 2.4.0):
+			. loads parameters from a file on the file system,
+		      or from a resource with default settings if that file is missing
+		    . allows to change the loglevel from that configuration file 
+		      (no need to edit the logback.xml file inside the .jar file)
+		    . allows to configure a rotating log file as alternative to
+		      the default logging to std out.
+		. custom uncaught exception handler which logs and mails those unexpected runtime exceptions
+		. Mailer component to send emails (plain text or html, with or without attachments)
+	. example app illustrating the usage of that skeleton
+	
