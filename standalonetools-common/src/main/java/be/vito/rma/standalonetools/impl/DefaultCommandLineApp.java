@@ -102,8 +102,8 @@ public class DefaultCommandLineApp implements CommandLineApp {
 
 	@Override
 	public void notifyAdmin(final String message) {
-		// use the message as subject
-		notifyAdmin(message, message);
+		String subject = " admin notification";
+		notifyAdmin(subject, message);
 	}
 
 }
