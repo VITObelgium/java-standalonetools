@@ -1,6 +1,5 @@
 package be.vito.rma.standalonetools.impl;
 
-import java.net.UnknownHostException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -11,6 +10,7 @@ import be.vito.rma.standalonetools.api.CommandLineAppConfiguration;
 import be.vito.rma.standalonetools.api.CommandLineAppRunnable;
 import be.vito.rma.standalonetools.handlers.DefaultUncaughtExceptionHandler;
 import be.vito.rma.standalonetools.services.Mailer;
+import be.vito.rma.standalonetools.HostnameTools;
 import be.vito.rma.standalonetools.SpringContextTools;
 import it.sauronsoftware.junique.AlreadyLockedException;
 import it.sauronsoftware.junique.JUnique;
@@ -58,12 +58,10 @@ public class DefaultCommandLineApp implements CommandLineApp {
 		if (appConfig.isAllowOnlyOneInstance()) {
 			// Only allow 1 instance to run
 			try {
-				JUnique.acquireLock(getAppName() + "-" + java.net.InetAddress.getLocalHost().getCanonicalHostName());
+				JUnique.acquireLock(getAppName() + "-" + HostnameTools.getHostname());
 			} catch (AlreadyLockedException e) {
 				logger.debug("Another instance of '" + getAppName() + "' is already running, exiting");
 				System.exit(1);
-			} catch (UnknownHostException e1) {
-				throw new RuntimeException("Could not determine fully qualified hostname", e1);
 			}
 		}
 
@@ -98,8 +96,14 @@ public class DefaultCommandLineApp implements CommandLineApp {
 			logger.error("Failed to notify admin: mailer component not available yet.\n" + subject + "\n" + message);
 		} else {
 			// send admin notification mails right away: if the program exits, the Mailer thread is killed before it can send emails
-			mailer.sendTextMail(emailAdmin, subject, message, false);
+			mailer.sendTextMail(emailAdmin, getAppName() + " @ " + HostnameTools.getHostname() + ": " + subject, message, false);
 		}
+	}
+
+	@Override
+	public void notifyAdmin(final String message) {
+		// use the message as subject
+		notifyAdmin(message, message);
 	}
 
 }

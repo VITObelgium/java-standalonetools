@@ -23,4 +23,6 @@ public interface CommandLineApp {
 
 	public void notifyAdmin (String subject, String message);
 
+	public void notifyAdmin (String message);
+
 }

@@ -3,11 +3,10 @@ package be.vito.rma.standalonetools.handlers;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.lang.Thread.UncaughtExceptionHandler;
-import java.net.UnknownHostException;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import be.vito.rma.standalonetools.HostnameTools;
 import be.vito.rma.standalonetools.api.CommandLineApp;
 
 /**
@@ -34,13 +33,7 @@ public class DefaultUncaughtExceptionHandler implements UncaughtExceptionHandler
 	@Override
 	public void uncaughtException(final Thread t, final Throwable e) {
 		logger.error("Unexpected error!", e);
-		String hostname = null;
-		try {
-			hostname = java.net.InetAddress.getLocalHost().getCanonicalHostName();
-		} catch (UnknownHostException e1) {
-			logger.warn("Could not determine fully qualified hostname", e1);
-		}
-        String subject = app.getAppName() + " @ " + hostname + " got unexpected error and exited!";
+        String subject = app.getAppName() + " @ " + HostnameTools.getHostname() + " got unexpected error and exited!";
         String message = subject;
         // include stacktrace into notification message
 		if (e != null) {
