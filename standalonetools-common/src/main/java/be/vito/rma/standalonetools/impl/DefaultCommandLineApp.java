@@ -1,5 +1,8 @@
 package be.vito.rma.standalonetools.impl;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -89,21 +92,43 @@ public class DefaultCommandLineApp implements CommandLineApp {
 	@Getter private ConfigurableApplicationContext applicationContext = null;
 
 	@Override
-	public void notifyAdmin(final String subject, final String message) {
+	public void notifyAdmin(final String subject, final String message, final Exception e) {
+		String fullMessage;
+		if (e != null) {
+			StringWriter sw = new StringWriter();
+			e.printStackTrace(new PrintWriter(sw));
+			String exceptionAsString = sw.toString();
+			fullMessage = message + "\nStack trace:\n" + exceptionAsString;
+		} else {
+			fullMessage = message;
+		}
 		if (mailer == null) {
 			// if notifyAdmin is called before the application context is fully loaded,
 			// there is no mailer instance, so we create one here in that case
-			logger.error("Failed to notify admin: mailer component not available yet.\n" + subject + "\n" + message);
+			logger.error("Failed to notify admin: mailer component not available yet.\n" + subject + "\n" + fullMessage);
 		} else {
 			// send admin notification mails right away: if the program exits, the Mailer thread is killed before it can send emails
-			mailer.sendTextMail(emailAdmin, getAppName() + " @ " + HostnameTools.getHostname() + ": " + subject, message, false);
+			mailer.sendTextMail(emailAdmin, getAppName() + " @ " + HostnameTools.getHostname() + ": " + subject, fullMessage, false);
 		}
 	}
 
 	@Override
+	public void notifyAdmin(final String subject, final String message) {
+		notifyAdmin(subject, message, null);
+	}
+
+	private String getDefaultSubject () {
+		return "admin notification";
+	}
+
+	@Override
+	public void notifyAdmin(final String message, final Exception e) {
+		notifyAdmin(getDefaultSubject(), message, e);
+	}
+
+	@Override
 	public void notifyAdmin(final String message) {
-		String subject = " admin notification";
-		notifyAdmin(subject, message);
+		notifyAdmin(getDefaultSubject(), message, null);
 	}
 
 }
