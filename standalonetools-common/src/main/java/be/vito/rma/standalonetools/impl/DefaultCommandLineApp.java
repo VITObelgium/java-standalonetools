@@ -99,8 +99,10 @@ public class DefaultCommandLineApp implements CommandLineApp {
 			cause.printStackTrace(new PrintWriter(sw));
 			String exceptionAsString = sw.toString();
 			fullMessage = message + "\nStack trace:\n" + exceptionAsString;
+			logger.error(fullMessage, cause);
 		} else {
 			fullMessage = message;
+			logger.error(fullMessage);
 		}
 		if (mailer == null) {
 			// if notifyAdmin is called before the application context is fully loaded,
