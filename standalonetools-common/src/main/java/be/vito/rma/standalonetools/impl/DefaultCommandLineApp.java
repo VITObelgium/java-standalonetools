@@ -92,11 +92,11 @@ public class DefaultCommandLineApp implements CommandLineApp {
 	@Getter private ConfigurableApplicationContext applicationContext = null;
 
 	@Override
-	public void notifyAdmin(final String subject, final String message, final Exception e) {
+	public void notifyAdmin(final String subject, final String message, final Throwable cause) {
 		String fullMessage;
-		if (e != null) {
+		if (cause != null) {
 			StringWriter sw = new StringWriter();
-			e.printStackTrace(new PrintWriter(sw));
+			cause.printStackTrace(new PrintWriter(sw));
 			String exceptionAsString = sw.toString();
 			fullMessage = message + "\nStack trace:\n" + exceptionAsString;
 		} else {
@@ -122,8 +122,8 @@ public class DefaultCommandLineApp implements CommandLineApp {
 	}
 
 	@Override
-	public void notifyAdmin(final String message, final Exception e) {
-		notifyAdmin(getDefaultSubject(), message, e);
+	public void notifyAdmin(final String message, final Throwable cause) {
+		notifyAdmin(getDefaultSubject(), message, cause);
 	}
 
 	@Override

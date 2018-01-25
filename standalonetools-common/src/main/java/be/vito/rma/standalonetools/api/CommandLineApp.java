@@ -21,11 +21,11 @@ public interface CommandLineApp {
 
 	public ConfigurableApplicationContext getApplicationContext();
 
-	public void notifyAdmin (String subject, String message, Exception e);
+	public void notifyAdmin (String subject, String message, Throwable cause);
 
 	public void notifyAdmin (String subject, String message);
 
-	public void notifyAdmin (String message, Exception e);
+	public void notifyAdmin (String message, Throwable cause);
 
 	public void notifyAdmin (String message);
 
