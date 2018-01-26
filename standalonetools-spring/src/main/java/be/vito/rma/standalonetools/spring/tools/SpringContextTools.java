@@ -1,4 +1,4 @@
-package be.vito.rma.standalonetools;
+package be.vito.rma.standalonetools.spring.tools;
 
 import java.io.BufferedReader;
 import java.io.File;

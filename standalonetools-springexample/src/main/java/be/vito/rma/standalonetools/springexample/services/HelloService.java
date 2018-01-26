@@ -1,4 +1,4 @@
-package be.vito.rma.standalonetools.example.services;
+package be.vito.rma.standalonetools.springexample.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

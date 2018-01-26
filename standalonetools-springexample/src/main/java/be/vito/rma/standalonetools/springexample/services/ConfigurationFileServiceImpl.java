@@ -1,4 +1,4 @@
-package be.vito.rma.standalonetools.example.services;
+package be.vito.rma.standalonetools.springexample.services;
 
 import java.io.File;
 

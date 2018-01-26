@@ -8,8 +8,9 @@
 	    http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 	">
 
-		<import resource="classpath:resttoolsCommonContext.xml" />
+		<!-- import standalone common context -->
+		<import resource="classpath:standalonetoolsContext.xml" />
 
-		<context:component-scan base-package="be.vito.rma.standalonetools.services" />
+		<context:component-scan base-package="$PACKAGE$" />
 
 </beans>

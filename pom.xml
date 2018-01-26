@@ -10,6 +10,8 @@
 	<modules>
 		<module>standalonetools-common</module>
 		<module>standalonetools-example</module>
+		<module>standalonetools-spring</module>
+		<module>standalonetools-springexample</module>
 	</modules>
 
 	<properties>
@@ -36,6 +38,11 @@
 			<dependency>
 				<groupId>be.vito.rma.standalonetools</groupId>
 				<artifactId>standalonetools-common</artifactId>
+				<version>${project.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>be.vito.rma.standalonetools</groupId>
+				<artifactId>standalonetools-spring</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 		

@@ -1,4 +1,4 @@
-package be.vito.rma.standalonetools;
+package be.vito.rma.standalonetools.tools;
 
 import java.net.UnknownHostException;
 

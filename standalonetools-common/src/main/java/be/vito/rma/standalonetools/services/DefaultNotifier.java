@@ -3,37 +3,35 @@ package be.vito.rma.standalonetools.services;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 
-import javax.annotation.PostConstruct;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import be.vito.rma.resttools.common.services.ConfigurationService;
-import be.vito.rma.standalonetools.HostnameTools;
-import lombok.Setter;
+import be.vito.rma.standalonetools.tools.HostnameTools;
+import be.vito.rma.standalonetools.api.Mailer;
+import be.vito.rma.standalonetools.api.Notifier;
 
 /**
  * @author (c) 2018 Stijn.VanLooy@vito.be
  *
  */
-@Component
-public class AdminNotificationService {
+public class DefaultNotifier implements Notifier {
 
 	private String emailAdmin;
-	@Setter private String appName = null;
+	private String appName = null;
 
-	private final Logger logger = LoggerFactory.getLogger(AdminNotificationService.class);
+	private final Logger logger = LoggerFactory.getLogger(DefaultNotifier.class);
 
-	@Autowired private Mailer mailer;
-	@Autowired private ConfigurationService config;
+	private Mailer mailer;
 
-	@PostConstruct
-	private void init () {
+	public DefaultNotifier (final String appName, final ConfigurationService config, final Mailer mailer) {
+		this.appName = appName;
+		this.mailer = mailer;
 		emailAdmin = config.getString("email.admin.to.address");
 	}
 
+	@Override
 	public void notifyAdmin(final String subject, final String message, final Throwable cause) {
 		String fullMessage;
 		if (cause != null) {
@@ -41,10 +39,10 @@ public class AdminNotificationService {
 			cause.printStackTrace(new PrintWriter(sw));
 			String exceptionAsString = sw.toString();
 			fullMessage = message + "\nStack trace:\n" + exceptionAsString;
-			logger.error(fullMessage, cause);
+			logger.error(message, cause);
 		} else {
 			fullMessage = message;
-			logger.error(fullMessage);
+			logger.error(message);
 		}
 		if (mailer == null) {
 			// if notifyAdmin is called before the application context is fully loaded,
@@ -57,6 +55,7 @@ public class AdminNotificationService {
 		}
 	}
 
+	@Override
 	public void notifyAdmin(final String subject, final String message) {
 		notifyAdmin(subject, message, null);
 	}
@@ -65,10 +64,12 @@ public class AdminNotificationService {
 		return "admin notification";
 	}
 
+	@Override
 	public void notifyAdmin(final String message, final Throwable cause) {
 		notifyAdmin(getDefaultSubject(), message, cause);
 	}
 
+	@Override
 	public void notifyAdmin(final String message) {
 		notifyAdmin(getDefaultSubject(), message, null);
 	}

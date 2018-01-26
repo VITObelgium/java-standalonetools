@@ -7,7 +7,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.FileDataSource;
-import javax.annotation.PostConstruct;
 import javax.mail.BodyPart;
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -21,10 +20,9 @@ import javax.mail.internet.MimeMultipart;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import be.vito.rma.resttools.common.services.ConfigurationService;
+import be.vito.rma.standalonetools.api.Mailer;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -40,8 +38,7 @@ class MessageData {
  * @author (c) 2014-2018 Stijn.VanLooy@vito.be
  *
  */
-@Component
-public class Mailer extends Thread {
+public class DefaultMailer extends Thread implements Mailer {
 
 	public final static String EMAIL_INTERVAL = "email.interval.seconds";
 	public final static String EMAIL_FROM = "email.from.address";
@@ -50,36 +47,12 @@ public class Mailer extends Thread {
 	private int mailInterval;
 	private String fromAddress;
 
-	@Autowired
-	@Setter private ConfigurationService config;
-
-	private final Logger logger = LoggerFactory.getLogger(Mailer.class);
+	private final Logger logger = LoggerFactory.getLogger(DefaultMailer.class);
 	// thread save queue
 	private LinkedBlockingQueue<MessageData> queue = new LinkedBlockingQueue<>();
 
-	/**
-	 * Do not use this constructor
-	 * used by Spring
-	 */
-	public Mailer () {
+	public DefaultMailer (final ConfigurationService config) {
 		super();
-	}
-
-	/**
-	 *  use this constructor outside Spring
-	 * @param config
-	 */
-	public Mailer (final ConfigurationService config) {
-		super();
-		this.config = config;
-		init();
-	}
-
-	/**
-	 * called by Spring after construction, no need to run this outside Spring
-	 */
-	@PostConstruct
-	public void init () {
 		System.getProperties().setProperty("mail.smtp.host", config.getString(EMAIL_SMTP));
 		mailInterval = config.getInt(EMAIL_INTERVAL) * 1000;
 		fromAddress = config.getString(EMAIL_FROM);
@@ -127,10 +100,12 @@ public class Mailer extends Thread {
 	/*
 	 * Inspired by: http://www.tutorialspoint.com/java/java_sending_email.htm
 	 */
+	@Override
 	public void sendHtmlMail(final String recipientAddress,
 			final String subject, final String htmlContent) {
 		sendHtmlMail(recipientAddress, subject, htmlContent, true);
 	}
+	@Override
 	public void sendHtmlMail(final String recipientAddress,
 			final String subject, final String htmlContent, final boolean useQueue) {
 		Session session = Session.getDefaultInstance(System.getProperties());
@@ -148,10 +123,12 @@ public class Mailer extends Thread {
 		}
 	}
 
+	@Override
 	public void sendTextMail(final String recipientAddress,
 			final String subject, final String textContent) {
 		sendTextMail(recipientAddress, subject, textContent, true);
 	}
+	@Override
 	public void sendTextMail(final String recipientAddress,
 			final String subject, final String textContent, final boolean useQueue) {
 		Session session = Session.getDefaultInstance(System.getProperties());
@@ -169,11 +146,13 @@ public class Mailer extends Thread {
 		}
 	}
 
+	@Override
 	public void sendHtmlMailWithAttachments (final String recipientAddress,
 			final String subject, final String htmlContent, final List<String> attachmentNames,
 			final List<File> attachmentFiles) {
 		sendHtmlMailWithAttachments(recipientAddress, subject, htmlContent, attachmentNames, attachmentFiles, true);
 	}
+	@Override
 	public void sendHtmlMailWithAttachments (final String recipientAddress,
 			final String subject, final String htmlContent, final List<String> attachmentNames,
 			final List<File> attachmentFiles, final boolean useQueue) {

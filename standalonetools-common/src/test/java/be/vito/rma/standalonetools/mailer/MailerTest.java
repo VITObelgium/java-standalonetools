@@ -4,7 +4,8 @@ import java.io.File;
 
 import be.vito.rma.resttools.common.api.ConfigurationFileService;
 import be.vito.rma.resttools.common.services.ConfigurationService;
-import be.vito.rma.standalonetools.services.Mailer;
+import be.vito.rma.standalonetools.api.Mailer;
+import be.vito.rma.standalonetools.services.DefaultMailer;
 
 /**
  * @author (c) 2016-2018 Stijn.VanLooy@vito.be
@@ -27,9 +28,7 @@ public class MailerTest {
 			}
 		});
 
-		Mailer mailer = new Mailer();
-		mailer.setConfig(config);
-		mailer.init();
+		Mailer mailer = new DefaultMailer(config);
 
 		for (int i = 0; i < 3; i++) {
 			MailingThread thread = new MailingThread("mailer " + i, mailer);
