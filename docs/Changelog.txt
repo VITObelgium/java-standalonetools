@@ -12,5 +12,7 @@
 		      the default logging to std out.
 		. custom uncaught exception handler which logs and mails those unexpected runtime exceptions
 		. Mailer component to send emails (plain text or html, with or without attachments)
+		. AdminNotificationService component to log errors and send a notification email 
+		  to a configurable admin address
 	. example app illustrating the usage of that skeleton
 	

@@ -10,6 +10,7 @@ import be.vito.rma.standalonetools.api.CommandLineAppConfiguration;
 import be.vito.rma.standalonetools.example.services.ConfigurationFileServiceImpl;
 import be.vito.rma.standalonetools.example.services.HelloService;
 import be.vito.rma.standalonetools.impl.DefaultCommandLineApp;
+import be.vito.rma.standalonetools.services.AdminNotificationService;
 import be.vito.rma.standalonetools.services.Mailer;
 
 /**
@@ -39,24 +40,28 @@ public class Main {
 			// we can get the app's name and version
 			logger.info("Runnable payload starting for " + app.getAppName() + " version " + app.getAppVersion());
 
-			// we can fetch and use the ConfigurationService and the Mailer
-			ConfigurationService config = app.getConfig();
-			Mailer mailer = app.getMailer();
-
 			// we can get the application context and load Spring beans from it
 			ApplicationContext appCtx = app.getApplicationContext();
+
+			// ConfigurationService, Mailer, and AdminNotificationService
+			// are services provided by the skeleton
+			ConfigurationService config = appCtx.getBean(ConfigurationService.class);
+			Mailer mailer = appCtx.getBean(Mailer.class);
+			AdminNotificationService adminNotificationService = appCtx.getBean(AdminNotificationService.class);
+
+			// HelloService is an example custom service
 			HelloService service = appCtx.getBean(HelloService.class);
 
-			// we can send email messages
+			// we can send email messages using the Mailer component
 			String recipientAddress = config.getString("email.address");
 			String subject = "message from " + app.getAppName();
 			String textContent = service.getMessage();
 			mailer.sendTextMail(recipientAddress, subject, textContent);
 
-			// we can notify admin
-			 subject = app.getAppName() + " stopped!";
+			// we can notify admin using the AdminNotificationService component
+			subject = app.getAppName() + " stopped!";
 			String message = app.getAppName() + " version " + app.getAppVersion() + " stopped @ " + new Date();
-			app.notifyAdmin(subject, message);
+			adminNotificationService.notifyAdmin(subject, message);
 
 			// we need to explicitly exit the app (the Mailer component has a separate thread running forever)
 			System.exit(0);

@@ -1,8 +1,5 @@
 package be.vito.rma.standalonetools.impl;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -12,7 +9,7 @@ import be.vito.rma.standalonetools.api.CommandLineApp;
 import be.vito.rma.standalonetools.api.CommandLineAppConfiguration;
 import be.vito.rma.standalonetools.api.CommandLineAppRunnable;
 import be.vito.rma.standalonetools.handlers.DefaultUncaughtExceptionHandler;
-import be.vito.rma.standalonetools.services.Mailer;
+import be.vito.rma.standalonetools.services.AdminNotificationService;
 import be.vito.rma.standalonetools.HostnameTools;
 import be.vito.rma.standalonetools.SpringContextTools;
 import it.sauronsoftware.junique.AlreadyLockedException;
@@ -31,8 +28,8 @@ import lombok.Getter;
  */
 public class DefaultCommandLineApp implements CommandLineApp {
 
-	private String emailAdmin;
 	private final Logger logger = LoggerFactory.getLogger(DefaultCommandLineApp.class);
+	private ConfigurationService config;
 
 	/**
 	 *
@@ -52,8 +49,7 @@ public class DefaultCommandLineApp implements CommandLineApp {
 		applicationContext = SpringContextTools.getAppContext(this,
 				appConfig.getSpringContextTemplateResourceName(), appConfig.getSpringContextParameters());
 		config = getApplicationContext().getBean(ConfigurationService.class);
-		mailer = getApplicationContext().getBean(Mailer.class);
-		emailAdmin = config.getString("email.admin.to.address");
+		getApplicationContext().getBean(AdminNotificationService.class).setAppName(getAppName());
 
 		// default uncaught exception handler
 		Thread.setDefaultUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(this, logger));
@@ -85,52 +81,6 @@ public class DefaultCommandLineApp implements CommandLineApp {
 		return config.getVersion();
 	}
 
-	@Getter private ConfigurationService config;
-
-	@Getter private Mailer mailer;
-
 	@Getter private ConfigurableApplicationContext applicationContext = null;
-
-	@Override
-	public void notifyAdmin(final String subject, final String message, final Throwable cause) {
-		String fullMessage;
-		if (cause != null) {
-			StringWriter sw = new StringWriter();
-			cause.printStackTrace(new PrintWriter(sw));
-			String exceptionAsString = sw.toString();
-			fullMessage = message + "\nStack trace:\n" + exceptionAsString;
-			logger.error(fullMessage, cause);
-		} else {
-			fullMessage = message;
-			logger.error(fullMessage);
-		}
-		if (mailer == null) {
-			// if notifyAdmin is called before the application context is fully loaded,
-			// there is no mailer instance, so we create one here in that case
-			logger.error("Failed to notify admin: mailer component not available yet.\n" + subject + "\n" + fullMessage);
-		} else {
-			// send admin notification mails right away: if the program exits, the Mailer thread is killed before it can send emails
-			mailer.sendTextMail(emailAdmin, getAppName() + " @ " + HostnameTools.getHostname() + ": " + subject, fullMessage, false);
-		}
-	}
-
-	@Override
-	public void notifyAdmin(final String subject, final String message) {
-		notifyAdmin(subject, message, null);
-	}
-
-	private String getDefaultSubject () {
-		return "admin notification";
-	}
-
-	@Override
-	public void notifyAdmin(final String message, final Throwable cause) {
-		notifyAdmin(getDefaultSubject(), message, cause);
-	}
-
-	@Override
-	public void notifyAdmin(final String message) {
-		notifyAdmin(getDefaultSubject(), message, null);
-	}
 
 }

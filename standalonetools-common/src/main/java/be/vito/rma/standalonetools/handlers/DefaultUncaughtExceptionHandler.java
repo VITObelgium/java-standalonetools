@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import be.vito.rma.standalonetools.HostnameTools;
 import be.vito.rma.standalonetools.api.CommandLineApp;
+import be.vito.rma.standalonetools.services.AdminNotificationService;
 
 /**
  *
@@ -20,6 +21,7 @@ import be.vito.rma.standalonetools.api.CommandLineApp;
 public class DefaultUncaughtExceptionHandler implements UncaughtExceptionHandler {
 
 	private CommandLineApp app;
+	private AdminNotificationService notificationService;
 	private Logger logger;
 
 	public DefaultUncaughtExceptionHandler(final CommandLineApp app, final Logger logger) {
@@ -28,6 +30,7 @@ public class DefaultUncaughtExceptionHandler implements UncaughtExceptionHandler
 			this.logger = logger;
 		else
 			this.logger = LoggerFactory.getLogger(DefaultUncaughtExceptionHandler.class);
+		notificationService = app.getApplicationContext().getBean(AdminNotificationService.class);
 	}
 
 	@Override
@@ -42,7 +45,7 @@ public class DefaultUncaughtExceptionHandler implements UncaughtExceptionHandler
 			String exceptionAsString = sw.toString();
 			message = message + "\nStack trace:\n" + exceptionAsString;
 		}
-        app.notifyAdmin(subject, message);
+        notificationService.notifyAdmin(subject, message);
         if (app.getApplicationContext() != null)
         	app.getApplicationContext().close();
         System.exit(1);
