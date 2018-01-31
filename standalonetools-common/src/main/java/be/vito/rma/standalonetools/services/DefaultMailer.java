@@ -21,7 +21,7 @@ import javax.mail.internet.MimeMultipart;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import be.vito.rma.resttools.common.services.ConfigurationService;
+import be.vito.rma.configtools.common.api.ConfigurationService;
 import be.vito.rma.standalonetools.api.Mailer;
 import lombok.Getter;
 import lombok.Setter;

@@ -6,7 +6,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 
-import be.vito.rma.resttools.common.services.ConfigurationService;
+import be.vito.rma.configtools.common.api.ConfigurationService;
+import be.vito.rma.configtools.common.services.DefaultConfigurationService;
 import be.vito.rma.standalonetools.api.Mailer;
 import be.vito.rma.standalonetools.api.Notifier;
 import be.vito.rma.standalonetools.spring.SpringCommandLineApp;
@@ -25,7 +26,7 @@ public class Main {
 	public static void main(final String[] args) {
 
 		// temporarily load the configuration service to get the Spring context parameters
-		ConfigurationService staticConfig = new ConfigurationService(new ConfigurationFileServiceImpl());
+		ConfigurationService staticConfig = new DefaultConfigurationService(new ConfigurationFileServiceImpl());
 
 		// create CommandLineApp configuration
 		SpringCommandLineAppConfiguration appConfig = new SpringCommandLineAppConfiguration();

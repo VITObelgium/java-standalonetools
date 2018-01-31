@@ -5,7 +5,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import be.vito.rma.resttools.common.services.ConfigurationService;
+import be.vito.rma.configtools.common.api.ConfigurationService;
 import be.vito.rma.standalonetools.api.Mailer;
 import be.vito.rma.standalonetools.api.Notifier;
 import be.vito.rma.standalonetools.services.DefaultNotifier;

@@ -2,8 +2,9 @@ package be.vito.rma.standalonetools.mailer;
 
 import java.io.File;
 
-import be.vito.rma.resttools.common.api.ConfigurationFileService;
-import be.vito.rma.resttools.common.services.ConfigurationService;
+import be.vito.rma.configtools.common.api.ConfigurationFileService;
+import be.vito.rma.configtools.common.api.ConfigurationService;
+import be.vito.rma.configtools.common.services.DefaultConfigurationService;
 import be.vito.rma.standalonetools.api.Mailer;
 import be.vito.rma.standalonetools.services.DefaultMailer;
 
@@ -15,7 +16,7 @@ public class MailerTest {
 
 	public static void main (final String [] args) throws InterruptedException {
 
-		ConfigurationService config = new ConfigurationService(new ConfigurationFileService() {
+		ConfigurationService config = new DefaultConfigurationService(new ConfigurationFileService() {
 
 			@Override
 			public String getDefaultResourceName() {

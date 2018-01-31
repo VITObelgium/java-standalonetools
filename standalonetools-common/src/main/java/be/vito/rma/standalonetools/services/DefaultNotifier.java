@@ -7,7 +7,7 @@ import java.io.StringWriter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import be.vito.rma.resttools.common.services.ConfigurationService;
+import be.vito.rma.configtools.common.api.ConfigurationService;
 import be.vito.rma.standalonetools.tools.HostnameTools;
 import be.vito.rma.standalonetools.api.Mailer;
 import be.vito.rma.standalonetools.api.Notifier;

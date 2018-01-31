@@ -3,7 +3,8 @@ package be.vito.rma.standalonetools;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import be.vito.rma.resttools.common.services.ConfigurationService;
+import be.vito.rma.configtools.common.api.ConfigurationService;
+import be.vito.rma.configtools.common.services.DefaultConfigurationService;
 import be.vito.rma.standalonetools.api.CommandLineApp;
 import be.vito.rma.standalonetools.api.CommandLineAppRunnable;
 import be.vito.rma.standalonetools.api.DefaultCommandLineAppConfiguration;
@@ -31,7 +32,7 @@ public class DefaultCommandLineApp implements CommandLineApp {
 		this.appName = appConfig.getAppName();
 
 		// initialize components
-		config = new ConfigurationService(appConfig.getConfigFileService());
+		config = new DefaultConfigurationService(appConfig.getConfigFileService());
 		mailer = new DefaultMailer(config);
 		notifier = new DefaultNotifier(appName, config, mailer);
 

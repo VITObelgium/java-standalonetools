@@ -1,6 +1,6 @@
 package be.vito.rma.standalonetools.api;
 
-import be.vito.rma.resttools.common.api.ConfigurationFileService;
+import be.vito.rma.configtools.common.api.ConfigurationFileService;
 import lombok.Getter;
 import lombok.Setter;
 

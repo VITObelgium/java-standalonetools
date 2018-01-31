@@ -1,6 +1,6 @@
 package be.vito.rma.standalonetools.api;
 
-import be.vito.rma.resttools.common.services.ConfigurationService;
+import be.vito.rma.configtools.common.api.ConfigurationService;
 
 /**
  * @author (c) 2018 Stijn.VanLooy@vito.be
