@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>be.vito.rma.standalonetools</groupId>
 	<artifactId>standalonetools</artifactId>
-	<version>1.0.0-SNAPSHOT</version>
+	<version>1.0.0</version>
 	<packaging>pom</packaging>
 	<description>tools for building standalone applications</description>
 
@@ -17,6 +17,9 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<version.spring>5.0.2.RELEASE</version.spring>
+		<version.configtools>1.0.0</version.configtools>
+		<version.slf4j>1.7.25</version.slf4j>
+		<version.logback>1.2.2</version.logback>
 	</properties>
 
 	<build>
@@ -49,12 +52,12 @@
 			<dependency>
 				<groupId>be.vito.rma.configtools</groupId>
 				<artifactId>configtools-common</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>${version.configtools}</version>
 			</dependency>
 			<dependency>
 				<groupId>be.vito.rma.configtools</groupId>
 				<artifactId>configtools-spring</artifactId>
-				<version>1.0.0-SNAPSHOT</version>
+				<version>${version.configtools}</version>
 			</dependency>
 			
 			<dependency>
@@ -62,28 +65,24 @@
 				<artifactId>junique</artifactId>
 				<version>1.0.4</version>
 			</dependency>
-			<dependency>
-				<groupId>org.projectlombok</groupId>
-				<artifactId>lombok</artifactId>
-				<version>1.16.6</version>
-			</dependency>
+
 			<!-- logging -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
-				<version>1.7.25</version>
+				<version>${version.slf4j}</version>
 			</dependency>
 			<!-- Spring uses JCL, so we redirect that over slf4j -->
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>jcl-over-slf4j</artifactId>
-				<version>1.7.25</version>
+				<version>${version.slf4j}</version>
 			</dependency>
 			<!-- bind slf4j logging to logback -->
 			<dependency>
 				<groupId>ch.qos.logback</groupId>
 				<artifactId>logback-classic</artifactId>
-				<version>1.2.2</version>
+				<version>${version.logback}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
