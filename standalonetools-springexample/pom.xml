@@ -1,0 +1,75 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>be.vito.rma.standalonetools</groupId>
+		<artifactId>standalonetools</artifactId>
+		<version>1.0.0</version>
+	</parent>
+	<artifactId>standalonetools-springexample</artifactId>
+
+	<build>
+		<!-- This tells maven to scan the given directory for property files and 
+			replaces maven properties in those files This is used here to get the project 
+			version into src/main/resources/configuration.properties automatically -->
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
+		<plugins>
+			<!-- to create a .jar that contains all dependencies -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>3.1.0</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<!-- location of the main class -->
+									<mainClass>be.vito.rma.standalonetools.springexample.Main</mainClass>
+									<!-- we need to include this in the manifest, otherwise the imageIO 
+										libs won't work (required for geotiff reading) found this solution on http://johnewart.net/posts/2012/08/geotools/ 
+										God knows why imageIO wants to see these Implementation-xxx tags in the manifest! -->
+									<manifestEntries>
+										<Implementation-Vendor>Stijn Van Looy</Implementation-Vendor>
+										<Implementation-Vendor-Id>be.vito.rma</Implementation-Vendor-Id>
+										<Implementation-Version>1.0</Implementation-Version>
+									</manifestEntries>
+								</transformer>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+									<resource>META-INF/spring.handlers</resource>
+								</transformer>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+									<resource>META-INF/spring.schemas</resource>
+								</transformer>
+								<!-- This bit merges the various GeoTools META-INF/services files -->
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer" />
+							</transformers>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>be.vito.rma.standalonetools</groupId>
+			<artifactId>standalonetools-spring</artifactId>
+		</dependency>
+	</dependencies>
+
+</project>
