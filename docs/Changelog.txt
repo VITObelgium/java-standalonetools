@@ -16,4 +16,6 @@
 		  to a configurable admin address
 	. example app illustrating the usage of that skeleton
 	. support for both Spring and non-Spring standalone apps
-	
+
+1.0.1:
+	.	
