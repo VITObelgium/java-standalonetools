@@ -18,4 +18,4 @@
 	. support for both Spring and non-Spring standalone apps
 
 1.0.1:
-	.	
+	. added DefaultUncaughtExceptionHandler to the app config
