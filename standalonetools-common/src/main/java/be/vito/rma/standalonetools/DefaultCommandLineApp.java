@@ -33,8 +33,10 @@ public class DefaultCommandLineApp implements CommandLineApp {
 
 		// initialize components
 		config = new DefaultConfigurationService(appConfig.getConfigFileService());
-		mailer = new DefaultMailer(config);
-		notifier = new DefaultNotifier(appName, config, mailer);
+		if (config.getOptionalString(DefaultMailer.EMAIL_SMTP) != null) {
+			mailer = new DefaultMailer(config);
+			notifier = new DefaultNotifier(appName, config, mailer);
+		}
 
 		AppTools.initApp(this, appConfig, logger);
 

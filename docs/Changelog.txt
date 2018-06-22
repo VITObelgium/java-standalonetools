@@ -19,3 +19,4 @@
 
 1.0.1:
 	. added DefaultUncaughtExceptionHandler to the app config
+	. made mailer and notifier components optional (check on presence of email.smtp.server configuration parameter)
