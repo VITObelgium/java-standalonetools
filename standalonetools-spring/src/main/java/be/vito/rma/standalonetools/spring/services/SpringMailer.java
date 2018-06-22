@@ -25,7 +25,9 @@ public class SpringMailer implements Mailer {
 
 	@PostConstruct
 	public void init() {
-		mailer = new DefaultMailer(config);
+		if (config.getOptionalString(DefaultMailer.EMAIL_SMTP) != null) {
+			mailer = new DefaultMailer(config);
+		}
 	}
 
 	@Override

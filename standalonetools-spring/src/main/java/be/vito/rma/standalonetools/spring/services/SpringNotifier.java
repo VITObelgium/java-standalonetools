@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import be.vito.rma.configtools.common.api.ConfigurationService;
 import be.vito.rma.standalonetools.api.Mailer;
 import be.vito.rma.standalonetools.api.Notifier;
+import be.vito.rma.standalonetools.services.DefaultMailer;
 import be.vito.rma.standalonetools.services.DefaultNotifier;
 import lombok.Setter;
 
@@ -26,7 +27,9 @@ public class SpringNotifier implements Notifier {
 
 	@PostConstruct
 	public void init() {
-		notifier = new DefaultNotifier(appName, config, mailer);
+		if (config.getOptionalString(DefaultMailer.EMAIL_SMTP) != null) {
+			notifier = new DefaultNotifier(appName, config, mailer);
+		}
 	}
 
 	@Override
