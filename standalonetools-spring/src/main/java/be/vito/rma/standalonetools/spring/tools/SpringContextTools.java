@@ -65,7 +65,7 @@ public class SpringContextTools {
 	private static File createContextFile (final String appName, final String resourceName, final Map<String, String> parameters) throws IOException {
 		File out = File.createTempFile(appName + "-", "-ctx.xml");
 		out.deleteOnExit();
-		InputStream is = resourceName.getClass().getResourceAsStream(resourceName);
+		InputStream is = SpringContextTools.class.getResourceAsStream(resourceName);
 		BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
 		PrintWriter writer = new PrintWriter(out);
 		String line = null;

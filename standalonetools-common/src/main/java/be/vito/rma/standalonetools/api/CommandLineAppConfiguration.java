@@ -1,5 +1,7 @@
 package be.vito.rma.standalonetools.api;
 
+import java.lang.Thread.UncaughtExceptionHandler;
+
 /**
  * @author (c) 2018 Stijn.VanLooy@vito.be
  *
@@ -25,7 +27,13 @@ public interface CommandLineAppConfiguration {
 	 */
 	public boolean isLogStartedMessage();
 
-
-
+	/**
+	 * (optional)
+	 * When set, this UncaughtExceptionHandler will be used for uncaught exceptions.
+	 * When not set, a default implementation will be used which sends a notification message
+	 * using the app's notifier.
+	 * @return
+	 */
+	public UncaughtExceptionHandler getDefaultUncaughtExceptionHandler();
 
 }

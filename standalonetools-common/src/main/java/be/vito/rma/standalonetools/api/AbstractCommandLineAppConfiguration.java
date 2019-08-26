@@ -1,5 +1,7 @@
 package be.vito.rma.standalonetools.api;
 
+import java.lang.Thread.UncaughtExceptionHandler;
+
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +17,6 @@ public abstract class AbstractCommandLineAppConfiguration implements CommandLine
 
 	@Getter @Setter private boolean logStartedMessage = true;
 
+	@Getter @Setter private UncaughtExceptionHandler defaultUncaughtExceptionHandler = null;
 
 }

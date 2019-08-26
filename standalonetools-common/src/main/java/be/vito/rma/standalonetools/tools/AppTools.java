@@ -1,5 +1,7 @@
 package be.vito.rma.standalonetools.tools;
 
+import java.lang.Thread.UncaughtExceptionHandler;
+
 import org.slf4j.Logger;
 
 import be.vito.rma.standalonetools.api.CommandLineApp;
@@ -18,7 +20,8 @@ public class AppTools {
 
 	public static void initApp (final CommandLineApp app, final CommandLineAppConfiguration appConfig, final Logger logger) {
 		// default uncaught exception handler
-		Thread.setDefaultUncaughtExceptionHandler(new DefaultUncaughtExceptionHandler(app));
+		UncaughtExceptionHandler handler = appConfig.getDefaultUncaughtExceptionHandler();
+		Thread.setDefaultUncaughtExceptionHandler(handler == null ? new DefaultUncaughtExceptionHandler(app) : handler);
 
 		if (appConfig.isAllowOnlyOneInstance()) {
 			// Only allow 1 instance to run
