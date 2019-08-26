@@ -21,4 +21,6 @@
 	. added DefaultUncaughtExceptionHandler to the app config
 	. made mailer and notifier components optional (check on presence of email.smtp.server configuration parameter)
 	. bugfix: fixed reading Spring context templates from jar files in Windows environments 
-	
+
+2.0.0:
+	.	
