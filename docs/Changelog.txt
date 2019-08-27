@@ -23,4 +23,4 @@
 	. bugfix: fixed reading Spring context templates from jar files in Windows environments 
 
 2.0.0:
-	.	
+	. update to Java 11

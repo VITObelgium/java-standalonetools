@@ -9,21 +9,6 @@
 	<artifactId>standalonetools-common</artifactId>
 
 	<dependencies>
-		<!-- <dependency>
-			<groupId>be.vito.rma.resttools</groupId>
-			<artifactId>resttools-common</artifactId>
-			No need for Spring here
-			<exclusions>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-web</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.springframework</groupId>
-					<artifactId>spring-context</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency> -->
 
 		<dependency>
 			<groupId>be.vito.rma.configtools</groupId>
