@@ -24,7 +24,7 @@ public class Main {
 	public static void main(final String[] args) {
 
 		// create CommandLineApp configuration
-		DefaultCommandLineAppConfiguration appConfig = new DefaultCommandLineAppConfiguration();
+		final DefaultCommandLineAppConfiguration appConfig = new DefaultCommandLineAppConfiguration();
 		appConfig.setAppName("Example app");
 		appConfig.setConfigFileService(new ConfigurationFileService() {
 			@Override
@@ -35,6 +35,11 @@ public class Main {
 			@Override
 			public String getDefaultResourceName() {
 				return "configuration";
+			}
+
+			@Override
+			public boolean neverUseEnvironmentVariables() {
+				return false;
 			}
 		});
 		appConfig.setAllowOnlyOneInstance(true);
@@ -47,19 +52,19 @@ public class Main {
 
 			// ConfigurationService, Mailer, and Notifier
 			// are components provided by the skeleton
-			ConfigurationService config = app.getConfig();
-			Mailer mailer = app.getMailer();
-			Notifier notifier = app.getNotifier();
+			final ConfigurationService config = app.getConfig();
+			final Mailer mailer = app.getMailer();
+			final Notifier notifier = app.getNotifier();
 
 			// we can send email messages using the Mailer component
-			String recipientAddress = config.getString("email.address");
+			final String recipientAddress = config.getString("email.address");
 			String subject = "message from " + app.getAppName();
-			String textContent = config.getString("message");
+			final String textContent = config.getString("message");
 			mailer.sendTextMail(recipientAddress, subject, textContent);
 
 			// we can notify admin using the Notifier component
 			subject = app.getAppName() + " stopped!";
-			String message = app.getAppName() + " version " + app.getAppVersion() + " stopped @ " + new Date();
+			final String message = app.getAppName() + " version " + app.getAppVersion() + " stopped @ " + new Date();
 			notifier.notifyAdmin(subject, message);
 
 			// we need to explicitly exit the app (the Mailer component has a separate thread running forever)

@@ -23,4 +23,9 @@ public class ConfigurationFileServiceImpl implements ConfigurationFileService {
 		return "configuration";
 	}
 
+	@Override
+	public boolean neverUseEnvironmentVariables() {
+		return false;
+	}
+
 }

@@ -16,7 +16,7 @@ public class MailerTest {
 
 	public static void main (final String [] args) throws InterruptedException {
 
-		ConfigurationService config = new DefaultConfigurationService(new ConfigurationFileService() {
+		final ConfigurationService config = new DefaultConfigurationService(new ConfigurationFileService() {
 
 			@Override
 			public String getDefaultResourceName() {
@@ -27,12 +27,17 @@ public class MailerTest {
 			public File getConfigFile() {
 				return null;
 			}
+
+			@Override
+			public boolean neverUseEnvironmentVariables() {
+				return false;
+			}
 		});
 
-		Mailer mailer = new DefaultMailer(config);
+		final Mailer mailer = new DefaultMailer(config);
 
 		for (int i = 0; i < 3; i++) {
-			MailingThread thread = new MailingThread("mailer " + i, mailer);
+			final MailingThread thread = new MailingThread("mailer " + i, mailer);
 			thread.start();
 		}
 
@@ -47,10 +52,10 @@ public class MailerTest {
 
 class MailingThread extends Thread {
 
-	private Mailer mailer;
-	private String name;
-	private int count = 3;
-	private String recipientAddress = "someone@vito.be";
+	private final Mailer mailer;
+	private final String name;
+	private final int count = 3;
+	private final String recipientAddress = "someone@vito.be";
 
 	public MailingThread(final String name, final Mailer mailer) {
 		super();
@@ -61,7 +66,7 @@ class MailingThread extends Thread {
 	@Override
 	public void run () {
 		for (int i = 0; i < count; i++) {
-			String message = "message " + i + " from " + name;
+			final String message = "message " + i + " from " + name;
 			mailer.sendTextMail(recipientAddress, message, message);
 		}
 	}
