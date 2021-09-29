@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>be.vito.rma.standalonetools</groupId>
 	<artifactId>standalonetools</artifactId>
-	<version>2.0.2</version>
+	<version>2.0.3</version>
 	<packaging>pom</packaging>
 	<description>tools for building standalone applications</description>
 
@@ -17,7 +17,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<version.spring>5.1.6.RELEASE</version.spring>
-		<version.configtools>2.1.0</version.configtools>
+		<version.configtools>2.2.0</version.configtools>
 		<version.slf4j>1.7.25</version.slf4j>
 		<version.logback>1.2.2</version.logback>
 	</properties>

@@ -31,3 +31,7 @@
 2.0.2:
 	. added ArgsTools to standalonetools-common
 	
+2.0.3:
+	. configtools version update 2.1.0 -> 2.2.0
+	
+	
