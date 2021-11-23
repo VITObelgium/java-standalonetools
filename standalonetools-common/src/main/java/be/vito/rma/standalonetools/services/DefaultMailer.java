@@ -35,7 +35,7 @@ class MessageData {
 }
 
 /**
- * @author (c) 2014-2018 Stijn.VanLooy@vito.be
+ * @author (c) 2014-2021 Stijn.VanLooy@vito.be
  *
  */
 public class DefaultMailer extends Thread implements Mailer {
@@ -44,12 +44,12 @@ public class DefaultMailer extends Thread implements Mailer {
 	public final static String EMAIL_FROM = "email.from.address";
 	public final static String EMAIL_SMTP = "email.smtp.server";
 
-	private int mailInterval;
-	private String fromAddress;
+	private final int mailInterval;
+	private final String fromAddress;
 
 	private final Logger logger = LoggerFactory.getLogger(DefaultMailer.class);
 	// thread save queue
-	private LinkedBlockingQueue<MessageData> queue = new LinkedBlockingQueue<>();
+	private final LinkedBlockingQueue<MessageData> queue = new LinkedBlockingQueue<>();
 
 	public DefaultMailer (final ConfigurationService config) {
 		super();
@@ -63,7 +63,7 @@ public class DefaultMailer extends Thread implements Mailer {
 	public void run () {
 		try {
 			while (true) {
-				MessageData message = queue.take();
+				final MessageData message = queue.take();
 				sendMessage(message);
 				/*
 				 * make sure there is a mimimum amount of time between
@@ -73,7 +73,7 @@ public class DefaultMailer extends Thread implements Mailer {
 				Thread.sleep(mailInterval);
 				if (isInterrupted()) break;
 			}
-		} catch (InterruptedException e) {
+		} catch (final InterruptedException e) {
 			logger.warn("mailing thread interrupted", e);
 		}
 	}
@@ -83,14 +83,14 @@ public class DefaultMailer extends Thread implements Mailer {
 			Transport.send(message.getMimeMessage());
 			logger.info("Sent message with subject '" + message.getSubject() + "' to "
 					+ message.getRecipientAddress());
-		} catch (MessagingException e) {
+		} catch (final MessagingException e) {
 			logger.error("Failed to send message with subject '" + message.getSubject()
 				+ "' to " + message.getRecipientAddress(), e);
 		}
 	}
 
 	private MessageData createMessageData (final String recipientAddress, final String subject, final MimeMessage message) {
-		MessageData md = new MessageData();
+		final MessageData md = new MessageData();
 		md.setMimeMessage(message);
 		md.setRecipientAddress(recipientAddress);
 		md.setSubject(subject);
@@ -108,17 +108,17 @@ public class DefaultMailer extends Thread implements Mailer {
 	@Override
 	public void sendHtmlMail(final String recipientAddress,
 			final String subject, final String htmlContent, final boolean useQueue) {
-		Session session = Session.getDefaultInstance(System.getProperties());
+		final Session session = Session.getDefaultInstance(System.getProperties());
 		try {
-			MimeMessage message = new MimeMessage(session);
+			final MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(fromAddress));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipientAddress));
-			message.setSubject(subject);
-			message.setContent(htmlContent, "text/html");
-			MessageData md = createMessageData(recipientAddress, subject, message);
+			message.setSubject(subject, "UTF-8");
+			message.setContent(htmlContent, "text/html; charset=UTF-8");
+			final MessageData md = createMessageData(recipientAddress, subject, message);
 			if (useQueue) queue.add(md);
 			else sendMessage(md);
-		} catch (MessagingException mex) {
+		} catch (final MessagingException mex) {
 			logger.error("Failed to send message with subject '" + subject + "' to " + recipientAddress, mex);
 		}
 	}
@@ -131,17 +131,17 @@ public class DefaultMailer extends Thread implements Mailer {
 	@Override
 	public void sendTextMail(final String recipientAddress,
 			final String subject, final String textContent, final boolean useQueue) {
-		Session session = Session.getDefaultInstance(System.getProperties());
+		final Session session = Session.getDefaultInstance(System.getProperties());
 		try {
-			MimeMessage message = new MimeMessage(session);
+			final MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(fromAddress));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipientAddress));
-			message.setSubject(subject);
-			message.setText(textContent);
-			MessageData md = createMessageData(recipientAddress, subject, message);
+			message.setSubject(subject, "UTF-8");
+			message.setText(textContent, "UTF-8");
+			final MessageData md = createMessageData(recipientAddress, subject, message);
 			if (useQueue) queue.add(md);
 			else sendMessage(md);
-		} catch (MessagingException mex) {
+		} catch (final MessagingException mex) {
 			logger.error("Failed to send message with subject '" + subject + "' to " + recipientAddress, mex);
 		}
 	}
@@ -156,28 +156,28 @@ public class DefaultMailer extends Thread implements Mailer {
 	public void sendHtmlMailWithAttachments (final String recipientAddress,
 			final String subject, final String htmlContent, final List<String> attachmentNames,
 			final List<File> attachmentFiles, final boolean useQueue) {
-		Session session = Session.getDefaultInstance(System.getProperties());
+		final Session session = Session.getDefaultInstance(System.getProperties());
 		try {
-			MimeMessage message = new MimeMessage(session);
+			final MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(fromAddress));
 			message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipientAddress));
 			message.setSubject(subject);
 			BodyPart messageBodyPart = new MimeBodyPart();
 			messageBodyPart.setContent(htmlContent, "text/html");
-			Multipart multipart = new MimeMultipart();
+			final Multipart multipart = new MimeMultipart();
 			multipart.addBodyPart(messageBodyPart);
 			for (int i = 0; i < attachmentNames.size(); i++) {
 				messageBodyPart = new MimeBodyPart();
 				messageBodyPart.setFileName(attachmentNames.get(i));
-				DataSource dataSource = new FileDataSource(attachmentFiles.get(i));
+				final DataSource dataSource = new FileDataSource(attachmentFiles.get(i));
 				messageBodyPart.setDataHandler(new DataHandler(dataSource));
 				multipart.addBodyPart(messageBodyPart);
 			}
 			message.setContent(multipart);
-			MessageData md = createMessageData(recipientAddress, subject, message);
+			final MessageData md = createMessageData(recipientAddress, subject, message);
 			if (useQueue) queue.add(md);
 			else sendMessage(md);
-		} catch (MessagingException mex) {
+		} catch (final MessagingException mex) {
 			logger.error("Failed to send message with subject '" + subject + "' to " + recipientAddress, mex);
 		}
 	}
