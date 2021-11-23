@@ -35,5 +35,5 @@
 	. configtools version update 2.1.0 -> 2.2.0
 	
 2.0.4:
-	. 
+	. defined (utf-8) charset in outgoing email messages to support all utf-8 characters
 	
