@@ -29,12 +29,6 @@ public class SpringCommandLineApp implements CommandLineApp {
 
 	private final Logger logger = LoggerFactory.getLogger(SpringCommandLineApp.class);
 
-	/**
-	 *
-	 * @param appName
-	 * @param springContextTemplateResourceName the resource name of the Spring application context XML configuration
-	 * @param springContextParameters parameter key-value pairs, use empty list if the Spring application context is not parameterized
-	 */
 	public SpringCommandLineApp (final SpringCommandLineAppConfiguration appConfig, final SpringCommandLineAppRunnable runnable) {
 		// validation
 		if (appConfig.getAppName() == null) throw new RuntimeException ("CommandLineAppConfiguration.appName is required");
@@ -62,18 +56,18 @@ public class SpringCommandLineApp implements CommandLineApp {
 
 	// CommandLineApp interface
 
-	@Getter private String appName;
+	@Getter private final String appName;
 
 	@Override
 	public String getAppVersion () {
 		return config.getVersion();
 	}
 
-	@Getter private ConfigurationService config;
+	@Getter private final ConfigurationService config;
 
-	@Getter private Mailer mailer;
+	@Getter private final Mailer mailer;
 
-	@Getter private Notifier notifier;
+	@Getter private final Notifier notifier;
 
 	@Override
 	public void close () {

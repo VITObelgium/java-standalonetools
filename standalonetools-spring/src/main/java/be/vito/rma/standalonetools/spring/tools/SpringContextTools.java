@@ -35,18 +35,17 @@ public class SpringContextTools {
 	 * This method will replace those occurrences with the corresponding parameter value.
 	 * For example:
 	 * if a parameter URL = http://my.service.url is given,
-	 * 		<property name="url" value="$URL$"/>
+	 * 		property name="url" value="$URL$"
 	 * will be replaced by
-	 * 		<property name="url" value="http://my.service.url"/>
-	 * @param app
-	 * @param templateResourceName
-	 * @param parameters
-	 * @return
-	 * @throws IOException
+	 * 		property name="url" value="http://my.service.url"
+	 * @param app app to create the spring application context for
+	 * @param templateResourceName resource name for the spring context template
+	 * @param parameters parameters and their values for use in the template
+	 * @return the spring application context
 	 */
 	public static ConfigurableApplicationContext getAppContext (final CommandLineApp app, final String templateResourceName, final Map<String, String> parameters) {
 		try {
-			File contextFile = createContextFile(app.getAppName(), templateResourceName, parameters);
+			final File contextFile = createContextFile(app.getAppName(), templateResourceName, parameters);
 			// load application context from context file
 			String filename = contextFile.getAbsolutePath();
 			/*
@@ -55,24 +54,24 @@ public class SpringContextTools {
 			if (File.separator.equals("/"))
 				filename = File.separator + filename;
 			return new FileSystemXmlApplicationContext(filename);
-		} catch (IOException e) {
-			String message = "Failed creating application context";
+		} catch (final IOException e) {
+			final String message = "Failed creating application context";
 			logger.error(message, e);
 			throw new RuntimeException(message, e);
 		}
 	}
 
 	private static File createContextFile (final String appName, final String resourceName, final Map<String, String> parameters) throws IOException {
-		File out = File.createTempFile(appName + "-", "-ctx.xml");
+		final File out = File.createTempFile(appName + "-", "-ctx.xml");
 		out.deleteOnExit();
-		InputStream is = SpringContextTools.class.getResourceAsStream(resourceName);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
-		PrintWriter writer = new PrintWriter(out);
+		final InputStream is = SpringContextTools.class.getResourceAsStream(resourceName);
+		final BufferedReader reader = new BufferedReader(new InputStreamReader(is, Charset.forName("UTF-8")));
+		final PrintWriter writer = new PrintWriter(out);
 		String line = null;
 		while ((line = reader.readLine()) != null) {
-			for (Entry<String, String> entry : parameters.entrySet()) {
-				String key = "$" + entry.getKey().toUpperCase() + "$";
-				String value = entry.getValue();
+			for (final Entry<String, String> entry : parameters.entrySet()) {
+				final String key = "$" + entry.getKey().toUpperCase() + "$";
+				final String value = entry.getValue();
 				line = line.replace(key, value);
 			}
 			writer.println(line);
