@@ -40,4 +40,6 @@
 2.0.5:
 	. configtools version update 2.2.0 -> 2.2.1 (== open source version)
 	. first open source version (github + maven central)
-		
+
+2.0.6:
+	. 	
