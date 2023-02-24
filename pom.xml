@@ -5,8 +5,33 @@
 	<artifactId>standalonetools</artifactId>
 	<version>2.0.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<description>tools for building standalone applications</description>
-
+	
+	<name>${project.groupId}:${project.artifactId}</name>
+    <description>Tools for building standalone applications</description>
+    <url>https://github.com/VITObelgium/java-standalonetools</url>
+ 
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+ 
+    <developers>
+        <developer>
+            <name>Stijn Van Looy</name>
+            <email>Stijn.VanLooy@vito.be</email>
+            <organization>VITO</organization>
+            <organizationUrl>http://www.vito.be</organizationUrl>
+        </developer>
+    </developers>
+ 
+    <scm>
+        <connection>scm:git:git://github.com/VITObelgium/java-standalonetools.git</connection>
+        <developerConnection>scm:git:ssh://github.com/VITObelgium/java-standalonetools.git</developerConnection>
+        <url>https://github.com/VITObelgium/java-standalonetools/tree/master</url>
+    </scm>
+	
 	<modules>
 		<module>standalonetools-common</module>
 		<module>standalonetools-example</module>
@@ -14,10 +39,21 @@
 		<module>standalonetools-springexample</module>
 	</modules>
 
+	<distributionManagement>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
+        <repository>
+            <id>ossrh</id>
+            <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+        </repository>
+    </distributionManagement>
+
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<version.spring>5.1.6.RELEASE</version.spring>
-		<version.configtools>2.2.0</version.configtools>
+		<version.configtools>2.2.1</version.configtools>
 		<version.slf4j>1.7.25</version.slf4j>
 		<version.logback>1.2.2</version.logback>
 	</properties>
@@ -27,11 +63,69 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.8.1</version>
+				<version>3.10.1</version>
 				<configuration>
 					<release>11</release>
 				</configuration>
 			</plugin>
+			<plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>3.2.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.sonatype.plugins</groupId>
+                <artifactId>nexus-staging-maven-plugin</artifactId>
+                <version>1.6.13</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <serverId>ossrh</serverId>
+                    <nexusUrl>https://s01.oss.sonatype.org/</nexusUrl>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-gpg-plugin</artifactId>
+                <version>3.0.1</version>
+                <executions>
+                    <execution>
+                        <id>sign-artifacts</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>sign</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!-- Prevent gpg from using pinentry programs -->
+                    <gpgArguments>
+                        <arg>--pinentry-mode</arg>
+                        <arg>loopback</arg>
+                    </gpgArguments>
+                </configuration>
+            </plugin>
 		</plugins>
 	</build>
 
