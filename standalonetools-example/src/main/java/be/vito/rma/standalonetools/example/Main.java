@@ -39,7 +39,7 @@ public class Main {
 
 			@Override
 			public boolean neverUseEnvironmentVariables() {
-				return false;
+				return true;
 			}
 		});
 		appConfig.setAllowOnlyOneInstance(true);
