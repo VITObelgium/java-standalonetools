@@ -14,14 +14,14 @@ Add one (or all) of the following maven dependencies to your project.
 <dependency>
 	<groupId>be.vito.rma.standalonetools</groupId>
 	<artifactId>standalonetools-common</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
+	<version>3.0.0</version>
 </dependency>
 ```
 ```
 <dependency>
 	<groupId>be.vito.rma.standalonetools</groupId>
 	<artifactId>standalonetools-spring</artifactId>
-	<version>3.0.0-SNAPSHOT</version>
+	<version>3.0.0</version>
 </dependency>
 ```
 
